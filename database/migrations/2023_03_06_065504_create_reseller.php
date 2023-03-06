@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('reseller', function (Blueprint $table) {
             $table->id();
-            $table->string("Name", 200);
-            $table->string("Address", 200);
-            $table->string("MobileNumber", 100);
-            $table->string("Email", 100);
-            $table->string("ContactPerson", 100);
-            $table->integer('IdAgent')->unsigned();
-            $table->foreign('IdAgent')->references('id')->on('agent');
+            $table->string("name", 200);
+            $table->string("address", 200);
+            $table->string("mobileNumber", 100);
+            $table->string("email", 100);
+            $table->string("contactPerson", 100);
+            $table->unsignedBigInteger('idAgent');
+            $table->foreign('idAgent')->references('id')->on('agent');
             $table->timestamps();
             $table->softDeletes();
         });

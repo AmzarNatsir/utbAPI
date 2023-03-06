@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('supplier', function (Blueprint $table) {
             $table->id();
-            $table->string("Name", 200);
-            $table->string("Address", 200);
-            $table->string("MobileNumber", 100);
-            $table->string("Email", 100);
-            $table->string("ContactPerson", 100);
+            $table->string("name", 200);
+            $table->string("address", 200);
+            $table->string("mobileNumber", 100);
+            $table->string("email", 100);
+            $table->string("contactPerson", 100);
             $table->timestamps();
             $table->softDeletes();
         });
