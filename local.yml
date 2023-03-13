@@ -1,0 +1,56 @@
+version: '3'
+
+volumes:
+    local_mysql_data: {}
+    local_mysql_data_backup: {}
+
+services:
+    php: &php
+        build:
+            context: .
+            dockerfile: ./compose/laravel/Dockerfile
+        image: utb_local_php
+        container_name: php-utb
+        restart: unless-stopped
+        tty: true
+        depends_on:
+            - mysql
+        environment:
+            SERVICE_NAME: php
+            SERVICE_TAGS: dev
+        user: "0:0"
+        volumes:
+            - ./:/var/www/html
+            - ./vendor:/var/www/html/vendor
+            - ./storage:/var/www/html/storage
+    mysql:
+        build:
+            context: .
+            dockerfile: ./compose/mysql/Dockerfile
+        image: utb_local_mysql
+        container_name: mysql-utb
+        tty: true
+        env_file:
+            - .env.local
+        ports:
+            - 3307:3306
+        volumes:
+            - local_mysql_data:/var/lib/mysql/
+            - local_mysql_data_backup:/backups
+    nginx:
+        build:
+            context: .
+            dockerfile: ./compose/nginx/Dockerfile
+        image: utb-local-nginx
+        container_name: utb-nginx
+        restart: unless-stopped
+        tty: true
+        depends_on:
+            - php
+        volumes:
+            - ./:/var/www/html
+            - ./storage/certs:/etc/nginx/certs
+            - ./compose/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - 80:80
+            - 443:443
